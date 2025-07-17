@@ -1,0 +1,101 @@
+// This is your Prisma schema file
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String
+  fullName      String
+  profileImage  String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  founder       Founder?
+  sentMessages     Message[] @relation("SentMessages")
+  receivedMessages Message[] @relation("ReceivedMessages")
+  events        Event[]
+}
+
+model Founder {
+  id            String    @id @default(cuid())
+  userId        String    @unique
+  user          User      @relation(fields: [userId], references: [id])
+  companyName   String
+  industry      String
+  fundingStage  String
+  location      String
+  bio           String?
+  website       String?
+  linkedIn      String?
+  twitter       String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  connectionsAsA Connection[] @relation("FounderA")
+  connectionsAsB Connection[] @relation("FounderB")
+  skills        Skill[]
+  interests     Interest[]
+}
+
+model Connection {
+  id          String   @id @default(cuid())
+  founderAId  String
+  founderBId  String
+  status      String   @default("pending") // pending, accepted, rejected
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  founderA    Founder  @relation("FounderA", fields: [founderAId], references: [id])
+  founderB    Founder  @relation("FounderB", fields: [founderBId], references: [id])
+}
+
+model Message {
+  id          String   @id @default(cuid())
+  content     String
+  senderId    String
+  receiverId  String
+  read        Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  sender      User     @relation("SentMessages", fields: [senderId], references: [id])
+  receiver    User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
+}
+
+model Event {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  date        DateTime
+  location    String
+  type        String   // online, in-person
+  capacity    Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  organizer   User     @relation(fields: [organizerId], references: [id])
+  organizerId String
+  attendees   EventAttendee[]
+}
+
+model EventAttendee {
+  id        String   @id @default(cuid())
+  eventId   String
+  userId    String
+  status    String   // registered, attended, cancelled
+  createdAt DateTime @default(now())
+  event     Event    @relation(fields: [eventId], references: [id])
+}
+
+model Skill {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  founders  Founder[]
+}
+
+model Interest {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  founders  Founder[]
+}
