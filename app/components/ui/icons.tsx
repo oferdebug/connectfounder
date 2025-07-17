@@ -24,8 +24,11 @@ import {
   Lock,
   Eye,
   EyeOff,
-  type Icon as LucideIcon,
-} from 'lucide-react';
+  Globe,
+  Share2,
+  BookOpen,
+  type LucideIcon,
+} from "lucide-react";
 import { cn } from '@/lib/utils';
 
 // Define the props type for our Icon component
@@ -59,6 +62,9 @@ const iconMap: { [key: string]: LucideIcon } = {
   lock: Lock,
   eye: Eye,
   eyeOff: EyeOff,
+  globe: Globe,
+  share: Share2,
+  book: BookOpen,
 };
 
 // Icon component that renders the appropriate icon based on name prop
@@ -71,8 +77,39 @@ export function Icon({ name, size = 24, className, ...props }: IconProps) {
   }
 
   return (
-    <div {...props} className={cn('inline-flex', className)}>
+    <div {...props} className={cn("inline-flex", className)}>
       <IconComponent size={size} />
+    </div>
+  );
+}
+
+// Feature icons with gradients
+export function GlobalNetworkIcon({
+  className,
+  ...props
+}: Omit<IconProps, "name">) {
+  return (
+    <div {...props} className={cn("relative text-blue-600", className)}>
+      <Globe className="w-full h-full stroke-2" />
+    </div>
+  );
+}
+
+export function EventsIcon({ className, ...props }: Omit<IconProps, "name">) {
+  return (
+    <div {...props} className={cn("relative text-green-600", className)}>
+      <Calendar className="w-full h-full stroke-2" />
+    </div>
+  );
+}
+
+export function ResourcesIcon({
+  className,
+  ...props
+}: Omit<IconProps, "name">) {
+  return (
+    <div {...props} className={cn("relative text-purple-600", className)}>
+      <BookOpen className="w-full h-full stroke-2" />
     </div>
   );
 }
@@ -80,8 +117,40 @@ export function Icon({ name, size = 24, className, ...props }: IconProps) {
 // Logo component that renders the FounderConnect logo
 export function Logo({ className, ...props }: Omit<IconProps, 'name'>) {
   return (
-    <div {...props} className={cn('relative', className)}>
-      <img src="/icons/logo.svg" alt="FounderConnect Logo" width={32} height={32} />
+    <div {...props} className={cn("relative", className)}>
+      <svg
+        width="100%"
+        height="100%"
+        viewBox="0 0 120 120"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <rect width="120" height="120" rx="24" fill="url(#gradient)" />
+        <path
+          d="M40 50C40 44.4772 44.4772 40 50 40H70C75.5228 40 80 44.4772 80 50V70C80 75.5228 75.5228 80 70 80H50C44.4772 80 40 75.5228 40 70V50Z"
+          stroke="white"
+          strokeWidth="4"
+        />
+        <path
+          d="M53 60H67M60 53V67"
+          stroke="white"
+          strokeWidth="4"
+          strokeLinecap="round"
+        />
+        <defs>
+          <linearGradient
+            id="gradient"
+            x1="0"
+            y1="0"
+            x2="120"
+            y2="120"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stopColor="#3B82F6" />
+            <stop offset="1" stopColor="#8B5CF6" />
+          </linearGradient>
+        </defs>
+      </svg>
     </div>
   );
 }
@@ -112,3 +181,16 @@ export function EventIcon({ className, ...props }: Omit<IconProps, 'name'>) {
     </div>
   );
 }
+
+// Use a Lucide icon
+<>
+  <Icon name="users" size={24} />
+
+  {/* Use the app logo */}
+  <Logo className="w-12 h-12" />
+
+  {/* Use custom icons */}
+  <NetworkIcon />
+  <ConnectIcon />
+  <EventIcon />
+</>

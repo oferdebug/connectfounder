@@ -1,4 +1,4 @@
-import { classNames } from '../client-layout'
+import { classNames } from "@/utils/classNames";
 
 interface BadgeProps {
   variant?: "default" | "success" | "warning" | "error" | "info";
@@ -30,10 +30,14 @@ export function Badge({
   return (
     <span
       className={classNames(
-        "inline-flex items-center font-medium rounded-full",
-        variantClasses[variant],
-        sizeClasses[size],
-        className
+        [
+          "inline-flex items-center font-medium rounded-full",
+          variantClasses[variant],
+          sizeClasses[size],
+          className,
+        ]
+          .filter(Boolean)
+          .join(" ")
       )}
     >
       {children}

@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from "react";
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Icon, Logo } from '@/components/ui/icons';
+import { handleLoginSuccess } from "@/lib/auth-state";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -21,20 +22,30 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
       const data = await res.json();
+      console.log("Login response:", data);
 
       if (!res.ok) {
-        throw new Error(data.message || 'Something went wrong');
+        throw new Error(data.message || "Something went wrong");
       }
 
-      // Redirect to dashboard on success
-      router.push('/dashboard');
+      // Handle successful login
+      await handleLoginSuccess(data);
+
+      // Navigate to dashboard
+      router.replace("/dashboard");
+
+      // Wait a moment to ensure cookie is set
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // Force hard navigation
+      window.location.href = "/dashboard";
     } catch (err: any) {
       setError(err.message);
     } finally {
