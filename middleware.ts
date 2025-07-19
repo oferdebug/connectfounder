@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { verifyToken } from "@/lib/auth";
 
 const publicPaths = ["/login", "/register", "/", "/favicon.ico"];
-const staticPaths = ["/_next", "/static", "/images"];
+const staticPaths = ["/_next", "/static", "/images", "/icons"];
 
 export function middleware(request: NextRequest) {
   console.log("Middleware executing for path:", request.nextUrl.pathname);
@@ -15,43 +14,68 @@ export function middleware(request: NextRequest) {
   );
   const isApiPath = request.nextUrl.pathname.startsWith("/api");
 
-  // Get token from cookie
+  // Get authentication cookies
   const token = request.cookies.get("token")?.value;
-  console.log("Token present:", !!token);
+  const isAuthenticated =
+    request.cookies.get("isAuthenticated")?.value === "true";
 
-  // Verify token if present
-  const isValidToken = token ? verifyToken(token) : null;
-  console.log("Token valid:", !!isValidToken);
+  console.log("Token present:", !!token);
+  console.log("Auth cookie present:", isAuthenticated);
 
   // Allow API routes to handle their own auth
   if (isApiPath) {
+    console.log("API route - allowing through");
     return NextResponse.next();
   }
 
-  // Allow public and static paths
-  if (isPublicPath || isStaticPath) {
+  // Allow static files and assets
+  if (isStaticPath) {
+    return NextResponse.next();
+  }
+
+  // Allow public paths
+  if (isPublicPath) {
     // If user is authenticated and tries to access login/register, redirect to dashboard
     if (
-      isValidToken &&
+      isAuthenticated &&
+      token &&
       (request.nextUrl.pathname === "/login" ||
         request.nextUrl.pathname === "/register")
     ) {
-      console.log("Authenticated user redirecting to dashboard");
+      console.log(
+        "Authenticated user accessing login/register - redirecting to dashboard"
+      );
       return NextResponse.redirect(new URL("/dashboard", request.url));
     }
+    console.log("Public path - allowing through");
     return NextResponse.next();
   }
 
-  // Protected routes
-  if (!isValidToken) {
-    console.log("Unauthenticated user redirecting to login");
+  // Protected routes - check if user is authenticated
+  if (!isAuthenticated || !token) {
+    console.log(
+      "Unauthenticated user accessing protected route - redirecting to login"
+    );
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
   // Allow access to protected routes for authenticated users
+  console.log(
+    "Authenticated user accessing protected route - allowing through"
+  );
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/((?!api/auth|_next/static|_next/image|favicon.ico).*)"],
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - *.map (source maps)
+     */
+    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.map$).*)",
+  ],
 };
