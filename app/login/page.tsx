@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Icon, Logo } from "@/components/ui/icons";
+import { handleLoginSuccess } from "@/lib/auth-state";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -19,47 +20,30 @@ export default function LoginPage() {
     e.preventDefault();
     setError("");
     setLoading(true);
+    console.log("🚀 Login attempt started");
 
     try {
-      console.log("🔐 Attempting login with:", { email: formData.email });
-
+      console.log("📤 Sending request to /api/auth/login");
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
+        credentials: "include",
       });
 
       const data = await res.json();
-      console.log("📥 Login response:", {
-        status: res.status,
-        success: res.ok,
-      });
+      console.log("📥 Response received:", data);
 
       if (!res.ok) {
         throw new Error(data.message || "Login failed");
       }
 
-      console.log("✅ Login successful, redirecting to dashboard...");
+      console.log("✅ Login successful, storing auth state");
+      await handleLoginSuccess(data);
 
-      // Try multiple redirect methods
-      try {
-        // Method 1: Next.js router
-        router.push("/dashboard");
-
-        // Method 2: Fallback with delay
-        setTimeout(() => {
-          window.location.href = "/dashboard";
-        }, 1000);
-
-        // Method 3: Force redirect
-        setTimeout(() => {
-          window.location.replace("/dashboard");
-        }, 2000);
-      } catch (redirectError) {
-        console.error("Redirect failed:", redirectError);
-        // Manual fallback
-        window.open("/dashboard", "_self");
-      }
+      // Use window.location.href instead of router.push to avoid the loop
+      console.log("🔄 Redirecting to dashboard");
+      window.location.href = "/dashboard";
     } catch (err: any) {
       console.error("❌ Login error:", err);
       setError(err.message);
@@ -90,7 +74,7 @@ export default function LoginPage() {
         <div className="bg-white py-8 px-4 shadow-xl sm:rounded-2xl sm:px-10 border border-gray-100">
           <form className="space-y-6" onSubmit={handleSubmit}>
             {error && (
-              <div className="p-3 text-sm text-red-600 bg-red-50 rounded-lg border border-red-200">
+              <div className="p-3 text-sm text-red-600 bg-red-50 rounded-lg">
                 {error}
               </div>
             )}
@@ -114,7 +98,6 @@ export default function LoginPage() {
                     setFormData({ ...formData, email: e.target.value })
                   }
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  placeholder="Enter your email"
                 />
               </div>
             </div>
@@ -138,7 +121,6 @@ export default function LoginPage() {
                     setFormData({ ...formData, password: e.target.value })
                   }
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm pr-10"
-                  placeholder="Enter your password"
                 />
                 <button
                   type="button"
@@ -184,40 +166,10 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? (
-                  <div className="flex items-center">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Signing in...
-                  </div>
-                ) : (
-                  "Sign in"
-                )}
+                {loading ? "Signing in..." : "Sign in"}
               </button>
-            </div>
-
-            {/* Quick Test Section - Remove in production */}
-            <div className="mt-6 p-4 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
-              <p className="text-xs text-gray-600 mb-2">
-                🧪 <strong>Quick Test Credentials:</strong>
-              </p>
-              <div className="text-xs text-gray-500 space-y-1">
-                <div>Email: test@example.com</div>
-                <div>Password: password123</div>
-                <button
-                  type="button"
-                  onClick={() =>
-                    setFormData({
-                      email: "test@example.com",
-                      password: "password123",
-                    })
-                  }
-                  className="mt-2 px-2 py-1 bg-gray-200 text-gray-700 rounded text-xs hover:bg-gray-300"
-                >
-                  Fill Test Data
-                </button>
-              </div>
             </div>
           </form>
         </div>

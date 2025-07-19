@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 
 const DebugEverything = () => {
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState<any[]>([]);
   const [cookies, setCookies] = useState("");
   const [currentUrl, setCurrentUrl] = useState("");
 
@@ -13,7 +13,7 @@ const DebugEverything = () => {
     }
   }, []);
 
-  const addResult = (test, status, details) => {
+  const addResult = (test: string, status: string, details: string) => {
     setResults((prev) => [
       ...prev,
       {
@@ -25,7 +25,7 @@ const DebugEverything = () => {
     ]);
   };
 
-  const testRoute = async (route) => {
+  const testRoute = async (route: string | URL | Request) => {
     try {
       addResult(`Route Test: ${route}`, "🧪 TESTING", "Attempting to fetch...");
 
@@ -46,7 +46,11 @@ const DebugEverything = () => {
         );
       }
     } catch (error) {
-      addResult(`Route Test: ${route}`, "💥 ERROR", error.message);
+      if (error instanceof Error) {
+        addResult(`Route Test: ${route}`, " ERROR", error.message);
+      } else {
+        // Handle other types of errors
+      }
     }
   };
 
@@ -72,7 +76,11 @@ const DebugEverything = () => {
         addResult("Login API", "❌ FAILED", data.message);
       }
     } catch (error) {
-      addResult("Login API", "💥 ERROR", error.message);
+      if (error instanceof Error) {
+        addResult("Login API", " ERROR", error.message);
+      } else {
+        // Handle other types of errors
+      }
     }
   };
 
@@ -101,12 +109,16 @@ const DebugEverything = () => {
       } else {
         addResult("Registration API", "❌ FAILED", data.message);
       }
-    } catch (error) {
-      addResult("Registration API", "💥 ERROR", error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        addResult("Registration API", " ERROR", error.message);
+      } else {
+        // Handle other types of errors
+      }
     }
   };
 
-  const navigateDirectly = (path) => {
+  const navigateDirectly = (path: string) => {
     addResult(`Direct Navigation`, "🧪 TESTING", `Going to ${path}...`);
     window.location.href = path;
   };

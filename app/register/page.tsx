@@ -30,11 +30,6 @@ export default function RegisterPage() {
     }
 
     try {
-      console.log("📝 Attempting registration with:", {
-        fullName: formData.fullName,
-        email: formData.email,
-      });
-
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -46,21 +41,14 @@ export default function RegisterPage() {
       });
 
       const data = await res.json();
-      console.log("📥 Registration response:", {
-        status: res.status,
-        success: res.ok,
-      });
 
       if (!res.ok) {
-        throw new Error(data.message || "Registration failed");
+        throw new Error(data.message || "Something went wrong");
       }
 
-      console.log("✅ Registration successful, redirecting to dashboard...");
-
-      // Use window.location for a clean redirect
-      window.location.href = "/dashboard";
+      // Redirect to onboarding on success
+      router.push("/onboarding");
     } catch (err: any) {
-      console.error("❌ Registration error:", err);
       setError(err.message);
     } finally {
       setLoading(false);
@@ -91,7 +79,7 @@ export default function RegisterPage() {
         <div className="bg-white py-8 px-4 shadow-xl sm:rounded-2xl sm:px-10 border border-gray-100">
           <form className="space-y-6" onSubmit={handleSubmit}>
             {error && (
-              <div className="p-3 text-sm text-red-600 bg-red-50 rounded-lg border border-red-200">
+              <div className="p-3 text-sm text-red-600 bg-red-50 rounded-lg">
                 {error}
               </div>
             )}
@@ -115,7 +103,6 @@ export default function RegisterPage() {
                     setFormData({ ...formData, fullName: e.target.value })
                   }
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  placeholder="Enter your full name"
                 />
               </div>
             </div>
@@ -139,7 +126,6 @@ export default function RegisterPage() {
                     setFormData({ ...formData, email: e.target.value })
                   }
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  placeholder="Enter your email"
                 />
               </div>
             </div>
@@ -163,7 +149,6 @@ export default function RegisterPage() {
                     setFormData({ ...formData, password: e.target.value })
                   }
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm pr-10"
-                  placeholder="Create a password"
                 />
                 <button
                   type="button"
@@ -204,7 +189,6 @@ export default function RegisterPage() {
                     })
                   }
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  placeholder="Confirm your password"
                 />
               </div>
             </div>
@@ -213,16 +197,9 @@ export default function RegisterPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? (
-                  <div className="flex items-center">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Creating account...
-                  </div>
-                ) : (
-                  "Create account"
-                )}
+                {loading ? "Creating account..." : "Create account"}
               </button>
             </div>
 
