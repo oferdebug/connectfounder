@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import {
   Sidebar,
   SidebarContent,
@@ -9,6 +9,8 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
+  SidebarTrigger,
+  useSidebar,
 } from "./ui/sidebar";
 import { Icon, Logo } from "./ui/icons";
 import Link from "next/link";
@@ -43,64 +45,97 @@ const navigationItems = [
   { title: "Profile", url: "/profile", iconName: "settings" },
 ];
 
+function MobileHeader() {
+  return (
+    <div className="md:hidden bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between">
+      <div className="flex items-center gap-3">
+        <SidebarTrigger />
+        <Logo className="w-8 h-8" />
+        <span className="font-bold text-slate-900">FounderConnect</span>
+      </div>
+      <NotificationPanel />
+    </div>
+  );
+}
+
+function SidebarOverlay() {
+  const { isOpen, toggle } = useSidebar();
+
+  if (!isOpen) return null;
+
+  return (
+    <div
+      className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 md:hidden"
+      onClick={toggle}
+    />
+  );
+}
+
 export default function Template({ children }: { children: React.ReactNode }) {
   return (
     <NotificationProvider>
-      <div className="flex min-h-screen">
-        {/* Mobile backdrop */}
-        <div className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 md:hidden transition-opacity duration-200 sidebar-backdrop" />
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
+        <MobileHeader />
 
-        <Sidebar className="border-r border-slate-200/60 bg-white/80 backdrop-blur-md">
-          <SidebarHeader className="border-b border-slate-200/60 p-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Logo className="w-10 h-10" />
-                <div>
-                  <h2 className="font-bold text-slate-900 text-lg">
-                    FounderConnect
-                  </h2>
-                  <p className="text-xs text-slate-500">
-                    Network • Grow • Succeed
-                  </p>
+        <div className="flex">
+          <SidebarOverlay />
+
+          <Sidebar className="border-r border-slate-200/60 bg-white/80 backdrop-blur-md">
+            <SidebarHeader className="border-b border-slate-200/60 p-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Logo className="w-10 h-10" />
+                  <div>
+                    <h2 className="font-bold text-slate-900 text-lg">
+                      FounderConnect
+                    </h2>
+                    <p className="text-xs text-slate-500">
+                      Network • Grow • Succeed
+                    </p>
+                  </div>
+                </div>
+                <div className="hidden md:block">
+                  <NotificationPanel />
                 </div>
               </div>
-              <NotificationPanel />
-            </div>
-          </SidebarHeader>
+            </SidebarHeader>
 
-          <SidebarContent className="p-3">
-            <SidebarGroup>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {navigationItems.map((item) => (
-                    <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton
-                        asChild
-                        className="mb-1 h-11 px-4 rounded-xl transition-all duration-200 hover:bg-slate-100 text-slate-700 hover:text-slate-900"
-                      >
-                        <Link
-                          href={item.url}
-                          className="flex items-center gap-3"
+            <SidebarContent className="p-3">
+              <SidebarGroup>
+                <SidebarGroupContent>
+                  <SidebarMenu>
+                    {navigationItems.map((item) => (
+                      <SidebarMenuItem key={item.title}>
+                        <SidebarMenuButton
+                          asChild
+                          className="mb-1 h-11 px-4 rounded-xl transition-all duration-200 hover:bg-slate-100 text-slate-700 hover:text-slate-900"
                         >
-                          <Icon name={item.iconName} size={20} />
-                          <span>{item.title}</span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-          </SidebarContent>
+                          <Link
+                            href={item.url}
+                            className="flex items-center gap-3"
+                          >
+                            <Icon name={item.iconName} size={20} />
+                            <span>{item.title}</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    ))}
+                  </SidebarMenu>
+                </SidebarGroupContent>
+              </SidebarGroup>
+            </SidebarContent>
 
-          <SidebarFooter className="border-t border-slate-200/60 p-4">
-            <div className="text-sm text-slate-500 text-center">
-              © 2025 FounderConnect
-            </div>
-          </SidebarFooter>
-        </Sidebar>
+            <SidebarFooter className="border-t border-slate-200/60 p-4">
+              <div className="text-sm text-slate-500 text-center">
+                © 2025 FounderConnect
+              </div>
+            </SidebarFooter>
+          </Sidebar>
 
-        <main className="flex-1 flex flex-col overflow-hidden">{children}</main>
+          <main className="flex-1 min-w-0 flex flex-col">
+            <div className="flex-1 overflow-auto">{children}</div>
+          </main>
+        </div>
       </div>
     </NotificationProvider>
   );
