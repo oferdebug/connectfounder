@@ -1,0 +1,24 @@
+1:"$Sreact.fragment"
+2:I[1603,["285","static/chunks/285-edc8cb59563ac8be.js","874","static/chunks/874-437a265a67d6cfee.js","125","static/chunks/125-f459c06bed5108ce.js","177","static/chunks/app/layout-89aba4e3af30aa35.js"],"default"]
+3:I[7555,[],""]
+4:I[6678,["39","static/chunks/app/error-614617be1a9a1efb.js"],"default"]
+5:I[1295,[],""]
+6:I[6874,["874","static/chunks/874-437a265a67d6cfee.js","345","static/chunks/app/not-found-e9e7c7be562e3e45.js"],""]
+7:I[894,[],"ClientPageRoot"]
+8:I[1057,["285","static/chunks/285-edc8cb59563ac8be.js","874","static/chunks/874-437a265a67d6cfee.js","974","static/chunks/app/page-ca85bf80d0ca5968.js"],"default"]
+b:I[9665,[],"OutletBoundary"]
+d:I[4911,[],"AsyncMetadataOutlet"]
+f:I[9665,[],"ViewportBoundary"]
+11:I[9665,[],"MetadataBoundary"]
+12:"$Sreact.suspense"
+14:I[3188,["219","static/chunks/app/global-error-cd9106e993ae66cf.js"],"default"]
+:HL["/_next/static/media/e4af272ccee01ff0-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/_next/static/css/1954ac8ac5bf524e.css","style"]
+0:{"P":null,"b":"YiRyt3VL-iz8q6WVLJwCj","p":"","c":["",""],"i":false,"f":[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],["",["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/1954ac8ac5bf524e.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","html",null,{"lang":"en","children":["$","body",null,{"className":"__className_e8ce0c","children":["$","div",null,{"className":"min-h-screen w-full","children":["$","$L2",null,{"children":["$","$L3",null,{"parallelRouterKey":"children","error":"$4","errorStyles":[],"errorScripts":[],"template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","div",null,{"className":"min-h-screen bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center px-4","children":["$","div",null,{"className":"bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-8 max-w-md w-full text-center","children":[["$","div",null,{"className":"text-6xl mb-4","children":"🔍"}],["$","h2",null,{"className":"text-2xl font-bold text-white mb-4","children":"Page Not Found"}],["$","p",null,{"className":"text-white/80 mb-6","children":"Sorry, we couldn't find the page you're looking for."}],["$","div",null,{"className":"space-y-3","children":[["$","$L6",null,{"href":"/dashboard","className":"block w-full bg-white/20 hover:bg-white/30 text-white border border-white/30 px-6 py-3 rounded-lg font-semibold transition-all duration-200","children":"Go to Dashboard"}],["$","$L6",null,{"href":"/","className":"block w-full bg-white/10 hover:bg-white/20 text-white border border-white/20 px-6 py-3 rounded-lg font-medium transition-all duration-200","children":"Go home"}]]}]]}]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]}]}]}]}]]}],{"children":["__PAGE__",["$","$1","c",{"children":[["$","$L7",null,{"Component":"$8","searchParams":{},"params":{},"promises":["$@9","$@a"]}],null,["$","$Lb",null,{"children":["$Lc",["$","$Ld",null,{"promise":"$@e"}]]}]]}],{},null,false]},[["$","div","l",{"className":"min-h-screen bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center","children":["$","div",null,{"className":"bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-8 text-center","children":[["$","div",null,{"className":"animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"}],["$","div",null,{"className":"text-white font-medium","children":"Loading FounderConnect..."}],["$","div",null,{"className":"text-white/70 text-sm mt-2","children":"Please wait while we prepare your experience"}]]}]}],[],[]],false],["$","$1","h",{"children":[null,[["$","$Lf",null,{"children":"$L10"}],["$","meta",null,{"name":"next-size-adjust","content":""}]],["$","$L11",null,{"children":["$","div",null,{"hidden":true,"children":["$","$12",null,{"fallback":null,"children":"$L13"}]}]}]]}],false]],"m":"$undefined","G":["$14",[]],"s":false,"S":true}
+9:{}
+a:"$0:f:0:1:2:children:1:props:children:0:props:params"
+10:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+c:null
+15:I[8175,[],"IconMark"]
+e:{"metadata":[["$","title","0",{"children":"FounderConnect - Network with Fellow Entrepreneurs"}],["$","meta","1",{"name":"description","content":"Connect with founders, share experiences, and grow together"}],["$","link","2",{"rel":"icon","href":"/favicon.ico","type":"image/x-icon","sizes":"16x16"}],["$","$L15","3",{}]],"error":null,"digest":"$undefined"}
+13:"$e:metadata"
